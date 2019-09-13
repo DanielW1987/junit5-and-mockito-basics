@@ -1,10 +1,9 @@
-package rocks.danielw.mockito.bdd;
+package rocks.danielw.mockito.examples;
 
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import rocks.danielw.mockito.examples.WithMockito;
 import rocks.danielw.model.Owner;
 import rocks.danielw.repository.CrudRepository;
 import rocks.danielw.service.DummyService;

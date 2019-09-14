@@ -17,6 +17,7 @@ public class Controller {
     List<String> names = service.findAllByLastName("%" + lastName + "%");
 
     if (names.isEmpty()) {
+      service.doSomething();
       return "view/empty";
     }
     else if (names.size() == 1) {

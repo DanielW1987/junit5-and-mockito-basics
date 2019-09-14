@@ -67,4 +67,12 @@ class VerifyTest implements WithAssertions, WithMockito {
     verify(repository, never()).delete(1L);
   }
 
+  @Test
+  void testTimeout() {
+    service.delete(1L);
+
+    // test mock interactions
+    verify(repository, timeout(1000).atLeastOnce()).delete(1L);
+  }
+
 }

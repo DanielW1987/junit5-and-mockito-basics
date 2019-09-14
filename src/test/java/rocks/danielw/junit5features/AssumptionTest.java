@@ -2,6 +2,10 @@ package rocks.danielw.junit5features;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.ZoneId;
+
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 class AssumptionTest {
 
   /*
@@ -17,15 +21,24 @@ class AssumptionTest {
    */
 
   @Test
-  void testAssumption() {
-    // assumeTrue();
-    // ToDo DanielW: Implement example
+  void testAssumeTrue() {
+    assumeTrue(ZoneId.systemDefault().getId().equals("America/New_York"), "applicable time zone assumption");
+    System.out.println("assumption passed");
+    System.out.println("test continues");
   }
 
   @Test
-  void testAssumptionIfTrue() {
-    // assumeTrue();
-    // ToDo DanielW: Implement example
+  void testOnDev() {
+    System.setProperty("ENV", "DEV");
+    assumeTrue("DEV".equals(System.getProperty("ENV")), "Test execution skipped");
+    // remainder of test will proceed
+  }
+
+  @Test
+  void testOnProd() {
+    System.setProperty("ENV", "PROD");
+    assumeTrue("DEV".equals(System.getProperty("ENV")), "Test execution skipped");
+    // remainder of test will be aborted
   }
 
 }

@@ -6,8 +6,11 @@ public class Controller {
 
   private final Service service;
 
-  public Controller(Service service) {
+  private final OtherService otherService;
+
+  public Controller(Service service, OtherService otherService) {
     this.service = service;
+    this.otherService = otherService;
   }
 
   public String proceed(String lastName) {
@@ -26,6 +29,11 @@ public class Controller {
 
   public void proceedPersons() {
     service.varArgMethod(new Person("John", "Doe"), new Person("Thomas", "Doe"));
+  }
+
+  public void executeServices() {
+    otherService.doSomething();
+    service.doSomething();
   }
 
 }

@@ -12,4 +12,8 @@ public class Service {
     // do something with persons...
   }
 
+  public void doSomething() {
+    // do something...
+  }
+
 }

@@ -2,7 +2,12 @@ package rocks.danielw.mockito.examples;
 
 import org.assertj.core.api.WithAssertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.AdditionalMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import rocks.danielw.message.MessageController;
+import rocks.danielw.message.MessageService;
 import rocks.danielw.model.Owner;
 import rocks.danielw.repository.CrudRepository;
 import rocks.danielw.service.DummyService;
@@ -21,8 +26,14 @@ class ArgumentMatcherTest implements WithAssertions, WithMockito {
   @Mock
   FlowerService flowerService;
 
+  @Mock
+  private MessageService messageService;
+
   @InjectMocks
-  DummyService service;
+  private MessageController controller;
+
+  @InjectMocks
+  DummyService dummyService;
 
   @Test
   void testAnyStringMatcher() {
@@ -90,7 +101,7 @@ class ArgumentMatcherTest implements WithAssertions, WithMockito {
     Owner dummyOwner = Owner.builder().firstName("John").lastName("Doe").address("123 Street").telephone("123456789").build();
     Mockito.when(repository.create(any(Owner.class))).thenReturn(1L); // there are a bunch more any-methods in class ArgumentMatchers
 
-    Long id = service.create(dummyOwner);
+    Long id = dummyService.create(dummyOwner);
 
     // test mock interactions
     verify(repository, times(1)).create(any(Owner.class));
@@ -100,25 +111,11 @@ class ArgumentMatcherTest implements WithAssertions, WithMockito {
   }
 
   @Test
-  void testArgThat() {
-    // ToDo DanielW: Implement me
-    Owner dummyOwner = Owner.builder().firstName("John").lastName("Doe").address("123 Street").telephone("123456789").build();
+  void textArgThat() {
+    controller.deliverMessage("from", "to", "text");
 
-    // Use argThat() if you want your mock to return other objects depending on passed arguments
-    BDDMockito.given(repository.create(argThat(arg -> arg.getFirstName().equals("John")))).willReturn(1L);
-    //doReturn(1L).when(repository.create(argThat(arg -> arg.getFirstName().equals("John"))));
-    //doReturn(2L).when(repository.create(argThat(arg -> arg.getFirstName().equals("Max"))));
-
-    // Mockito.when(repository.create(argThat(arg -> arg.getFirstName().equals("John")))).thenReturn(1L);
-    // Mockito.when(repository.create(argThat(arg -> arg.getFirstName().equals("Max")))).thenReturn(2L);
-
-    Long id = service.create(dummyOwner);
-
-    // test mock interactions
-    verify(repository, times(1)).create(any(Owner.class));
-
-    // test result
-    assertThat(id).isEqualTo(1);
+    // verify that MessageService is called with a message that has a certain value for 'to'
+    verify(messageService, times(1)).deliverMessage(argThat(argument -> argument.getText().equals("text")));
   }
 
 }

@@ -6,9 +6,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import java.util.List;
-import java.util.Objects;
+import rocks.danielw.mockito.examples.dummys.Controller;
+import rocks.danielw.mockito.examples.dummys.MathUtils;
+import rocks.danielw.mockito.examples.dummys.Person;
+import rocks.danielw.mockito.examples.dummys.Service;
 
 import static org.mockito.Mockito.*;
 
@@ -44,7 +45,6 @@ class ArgumentCaptorTest implements WithAssertions, WithMockito {
   @Test
   void argumentCaptorTest() {
     // given
-    final String LAST_NAME = "Doe";
     final ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
 
     // when
@@ -98,80 +98,4 @@ class ArgumentCaptorTest implements WithAssertions, WithMockito {
     assertThat(acString.getAllValues()).containsExactly("1", "999");
   }
 
-}
-
-class Controller {
-
-  private final Service service;
-
-  public Controller(Service service) {
-    this.service = service;
-  }
-
-  void proceed(String lastName) {
-    List<String> allByLastName = service.findAllByLastName("%" + lastName + "%");
-    // do something with list...
-  }
-
-  void proceedPersons() {
-    service.varArgMethod(new Person("John", "Doe"), new Person("Thomas", "Doe"));
-  }
-
-}
-
-class Service {
-
-  List<String> findAllByLastName(String lastName) {
-    return List.of();
-  }
-
-  void varArgMethod(Person... persons) {
-    // do something with persons...
-  }
-
-}
-
-class Person {
-
-  private String firstName;
-  private String lastName;
-
-  Person(String firstName, String lastName) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Person person = (Person) o;
-    return firstName.equals(person.firstName) &&
-            lastName.equals(person.lastName);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(firstName, lastName);
-  }
-}
-
-class MathUtils {
-
-  public int add(int x, int y) {
-    return x + y;
-  }
-
-  public boolean isInteger(String s) {
-    try {
-      Integer.parseInt(s);
-    } catch (NumberFormatException e) {
-      return false;
-    }
-    return true;
-  }
-
-  public long squareLong(long l) {
-    return l*l;
-  }
 }
